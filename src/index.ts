@@ -2,6 +2,8 @@ import express from 'express'
 import fs from 'fs'
 import variants from './variants.json'
 
+fs.writeFileSync('pid',process.pid.toString())
+
 const app = express();
 const PORT = 3000;
 
@@ -31,3 +33,4 @@ app.get('/vote', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
 });
+
