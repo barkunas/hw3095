@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Тег FORM</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <form id='zebraFrom' action="/vote">
+        <p><b>Какого цвета зебра?</b></p>
+        <p id="inputBlock">
+        </p>
+        <p>
+            <button>Голосовать</button>
+        </p>
+        </p>
+        <p id="statBlock">
+    </form>
+    <script type="text/javascript">
+        //var inputBlock = document.getElementById('inputBlock');
+        getVariants()
+        function getVariants() {
+            $.ajax({
+                url: '/variants',
+                type: "GET",
+                success: function (response) {
+                    var variantsObj = response
+                    for (variant in variantsObj) {
+                        $(inputBlock).append(`<input type="radio" name="voteId" value="${variant}">${variantsObj[variant]}<Br>`)
+                    }
+                    getStat(variantsObj)
+
+                }
+            });
+        }
+        
+        function getStat(variantsObj) {
+            $.ajax({
+                url: '/stat',
+                type: "GET",
+                success: function (response) {
+                    for (variant in variantsObj) {
+                        $(statBlock).append(`<div>${variantsObj[variant]}</div><div>${response[variant]||0}</div><Br>`)
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
