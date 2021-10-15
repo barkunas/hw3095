@@ -10,19 +10,34 @@
 
 <body>
 
-    <form id='zebraFrom' action="/vote">
+    <form id='zebraFrom'>
         <p><b>Какого цвета зебра?</b></p>
         <p id="inputBlock">
         </p>
         <p>
-            <button>Голосовать</button>
+            <button id="button">Голосовать</button>
         </p>
         </p>
         <p id="statBlock">
     </form>
     <script type="text/javascript">
+        button.onclick = (event) => {
+            event.preventDefault();
+            var voteId = zebraFrom.elements.voteId.value;
+            $.ajax({
+                url: '/vote',
+                type: "GET",
+                data: { voteId },
+                success: function (variantsObj) {
+                    getStat(variantsObj)
+                }
+            });
+        }
         //var inputBlock = document.getElementById('inputBlock');
         getVariants()
+        function sendFrom(event) {
+            var formData = new FormData(zebraFrom)
+        }
         function getVariants() {
             $.ajax({
                 url: '/variants',
@@ -37,14 +52,15 @@
                 }
             });
         }
-        
+
         function getStat(variantsObj) {
+            $(statBlock).empty();
             $.ajax({
                 url: '/stat',
                 type: "GET",
                 success: function (response) {
                     for (variant in variantsObj) {
-                        $(statBlock).append(`<div>${variantsObj[variant]}</div><div>${response[variant]||0}</div><Br>`)
+                        $(statBlock).append(`<div>${variantsObj[variant]}</div><div>${response[variant] || 0}</div><Br>`)
                     }
                 }
             });

@@ -24,9 +24,9 @@ app.get('/vote', (req, res) => {
     if (variants.hasOwnProperty(voteId)) {
         obj[voteId] += 1;
         fs.writeFileSync('./results.json', JSON.stringify(obj));
-        res.redirect('/');
+        res.json(variants);
     } else {
-        res.redirect('/');
+        res.json(variants);
     }
 });
 
