@@ -26,10 +26,9 @@
             var voteId = zebraFrom.elements.voteId.value;
             $.ajax({
                 url: '/vote',
-                type: "GET",
+                type: "POST",
                 data: {
-                    voteId,
-                    uid: +new Date()
+                    voteId
                 },
                 success: function (variantsObj) {
                     getStat(variantsObj)
@@ -60,10 +59,7 @@
             $(statBlock).empty();
             $.ajax({
                 url: '/stat',
-                type: "GET",
-                data: {
-                    uid: +new Date()
-                },
+                type: "POST",
                 success: function (response) {
                     for (variant in variantsObj) {
                         $(statBlock).append(`<div>${variantsObj[variant]}</div><div>${response[variant] || 0}</div><Br>`)
