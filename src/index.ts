@@ -16,6 +16,7 @@ app.get('/variants', (req, res) => {
 });
 app.get('/stat', (req, res) => {
     const obj = fs.readFileSync('results.json');
+    res.set('Cache-Control', 'public, max-age=0');
     switch (req.headers.accept) {
         case 'json':
             res.send(obj)
