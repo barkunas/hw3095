@@ -17,10 +17,36 @@
         <p>
             <button id="button">Голосовать</button>
         </p>
-        </p>
         <p id="statBlock">
+        </p>
     </form>
+    <p>
+        <button class="GetFile" data-accepttype="json">скачать результате в формате JSON</button>
+    </p>
+    <p>
+        <button class="GetFile" data-accepttype="xml">скачать результате в формате XML</button>
+    </p>
+    <p>
+        <button class="GetFile" data-accepttype="html">скачать результате в формате HTML</button>
+    </p>
     <script type="text/javascript">
+        $('.GetFile').on('click', (event) => {
+            var type = event.target.dataset.accepttype
+            event.preventDefault();
+            $.ajax({
+                url: '/stat',
+                type: "GET",
+                headers: {
+                    Accept: type || "*"
+                },
+                success: (data) => {
+                    var fakebtn = document.createElement('a');//document.getElementById("target");
+                    fakebtn.href = window.URL.createObjectURL(new Blob([data]));
+                    fakebtn.download = 'result.' + type;
+                    fakebtn.click();
+                }
+            });
+        });
         button.onclick = (event) => {
             event.preventDefault();
             var voteId = zebraFrom.elements.voteId.value;
