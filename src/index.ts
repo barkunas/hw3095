@@ -30,16 +30,17 @@ app.get('/stat', (req, res) => {
             res.send(html);
             break;
         default:
-            res.status(404).end()
+            const json = JSON.parse(obj.toString());
+            res.json(json);
             break;
     }
     res.end()
 
-})
+})/* 
 app.post('/stat', (req, res) => {
     const obj = JSON.parse(fs.readFileSync('results.json').toString());
     res.json(obj);
-});
+}); */
 
 app.post('/vote', (req, res) => {
     const voteId = req.body.voteId as string;

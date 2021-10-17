@@ -85,7 +85,7 @@
             $(statBlock).empty();
             $.ajax({
                 url: '/stat',
-                type: "POST",
+                type: "GET",
                 success: function (response) {
                     for (variant in variantsObj) {
                         $(statBlock).append(`<div>${variantsObj[variant]}</div><div>${response[variant] || 0}</div><Br>`)
