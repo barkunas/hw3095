@@ -2,6 +2,7 @@ import express from 'express'
 import fs from 'fs'
 import variants from './variants.json'
 import bodyParser from 'body-parser'
+import path from 'path'
 
 fs.writeFileSync('pid', process.pid.toString());
 const app = express();
@@ -37,16 +38,27 @@ app.get('/stat', (req, res) => {
     res.end()
 
 });
-
+app.get('/error', (req, res) => {
+    res.sendFile(path.resolve('public/index.html'))
+})
 app.post<'/vote', {}, {}, IKeyStringString>('/vote', (req, res) => {
     const voteId = req.body.voteId;
-    const obj = JSON.parse(fs.readFileSync('./results.json').toString());
-    if (variants.hasOwnProperty(voteId)) {
-        obj[voteId] += 1;
-        fs.writeFileSync('./results.json', JSON.stringify(obj));
-        res.json(variants);
-    } else {
-        res.json(variants);
+    const origin = req.headers.origin;
+    //if (origin) res.setHeader("Location", origin)
+    try {
+        if (variants.hasOwnProperty(voteId)) {
+            const obj = JSON.parse(fs.readFileSync('./results.json').toString());
+            obj[voteId] += 1;
+            fs.writeFileSync('./results.json', JSON.stringify(obj));
+            //ВОТ ЭТОТ ВАРИАНТ ПОВТОРНО ГОЛОСУЕТ ПРИ ОБНОВЛЕНИИ СТРАНИЦЫ
+            //res.sendFile(path.resolve('public/index.html'))  
+            res.redirect('/')
+        } else {
+            res.redirect('/error')
+        }
+
+    } catch (error) {
+        res.redirect('/error')
     }
 });
 

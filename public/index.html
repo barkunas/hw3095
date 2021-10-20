@@ -10,12 +10,12 @@
 
 <body>
 
-    <form id='zebraFrom'>
+    <form id='zebraFrom' action="/vote" method="POST">
         <p><b>Какого цвета зебра?</b></p>
         <p id="inputBlock">
         </p>
         <p>
-            <button id="button">Голосовать</button>
+            <button id="button" type="submit">Голосовать</button>
         </p>
         <p id="statBlock">
         </p>
@@ -30,6 +30,7 @@
         <button class="GetFile" data-accepttype="html">скачать результате в формате HTML</button>
     </p>
     <script type="text/javascript">
+        if(location.href.indexOf('error')>=0)$('body').prepend('<div style="color:red;">Ошибка отправки формы</div>')
         $('.GetFile').on('click', (event) => {
             var type = event.target.dataset.accepttype
             event.preventDefault();
@@ -47,7 +48,7 @@
                 }
             });
         });
-        button.onclick = (event) => {
+        /* button.onclick = (event) => {
             event.preventDefault();
             var voteId = zebraFrom.elements.voteId.value;
             $.ajax({
@@ -60,12 +61,10 @@
                     getStat(variantsObj)
                 }
             });
-        }
+        } */
         //var inputBlock = document.getElementById('inputBlock');
         getVariants()
-        function sendFrom(event) {
-            var formData = new FormData(zebraFrom)
-        }
+        
         function getVariants() {
             $.ajax({
                 url: '/variants',
