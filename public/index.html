@@ -30,7 +30,7 @@
         <button class="GetFile" data-accepttype="html">скачать результате в формате HTML</button>
     </p>
     <script type="text/javascript">
-        if(location.href.indexOf('error')>=0)$('body').prepend('<div style="color:red;">Ошибка отправки формы</div>')
+        if (location.href.indexOf('error') >= 0) $('body').prepend('<div style="color:red;">Ошибка отправки формы</div>');
         $('.GetFile').on('click', (event) => {
             var type = event.target.dataset.accepttype
             event.preventDefault();
@@ -64,15 +64,18 @@
         } */
         //var inputBlock = document.getElementById('inputBlock');
         getVariants()
-        
+
         function getVariants() {
             $.ajax({
                 url: '/variants',
                 type: "GET",
                 success: function (response) {
-                    var variantsObj = response
+                    var variantsObj = response;
+                    var urlParams = new URLSearchParams(location.search);
+                    var voteId = urlParams.get('voteId');
                     for (variant in variantsObj) {
-                        $(inputBlock).append(`<input type="radio" name="voteId" value="${variant}">${variantsObj[variant]}<Br>`)
+                        $(inputBlock)
+                            .append(`<input type="radio" name="voteId" value="${variant}"${voteId === variant ? " checked" : ""}>${variantsObj[variant]}<Br>`)
                     }
                     getStat(variantsObj)
 
